@@ -1,0 +1,121 @@
+
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+@source '../**/*.jsx';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+/* =========================================
+   MARKDOWN CONTENT - BLOGVERSE PRO
+========================================= */
+
+/* Heading */
+.markdown-content h1 {
+    @apply mb-5 mt-8 text-3xl font-bold text-slate-900;
+}
+
+.markdown-content h2 {
+    @apply mb-4 mt-7 text-2xl font-bold text-slate-900;
+}
+
+.markdown-content h3 {
+    @apply mb-3 mt-6 text-xl font-semibold text-slate-900;
+}
+
+.markdown-content h4 {
+    @apply mb-3 mt-5 text-lg font-semibold text-slate-900;
+}
+
+/* Paragraph */
+.markdown-content p {
+    @apply mb-5 leading-8;
+}
+
+/* Text Formatting */
+.markdown-content strong {
+    @apply font-bold text-slate-900;
+}
+
+.markdown-content em {
+    @apply italic;
+}
+
+.markdown-content del {
+    @apply text-slate-500 line-through;
+}
+
+/* Lists */
+.markdown-content ul {
+    @apply mb-5 ml-6 list-disc space-y-2;
+}
+
+.markdown-content ol {
+    @apply mb-5 ml-6 list-decimal space-y-2;
+}
+
+.markdown-content li {
+    @apply pl-1 leading-7;
+}
+
+/* Blockquote */
+.markdown-content blockquote {
+    @apply mb-5 border-l-4 border-blue-500 bg-slate-50 py-3 pl-5 italic text-slate-600;
+}
+
+.markdown-content blockquote p {
+    @apply mb-0;
+}
+
+/* Links */
+.markdown-content a {
+    @apply text-blue-600 underline hover:text-blue-800;
+}
+
+/* Code Block */
+.markdown-content pre {
+    @apply mb-5 overflow-x-auto rounded-lg bg-slate-900 p-5 text-sm text-white;
+}
+
+.markdown-content code {
+    @apply rounded bg-slate-100 px-1.5 py-1 font-mono text-sm;
+}
+
+.markdown-content pre code {
+    @apply bg-transparent p-0 text-white;
+}
+
+/* Horizontal Line */
+.markdown-content hr {
+    @apply my-8 border-slate-200;
+}
+
+/* Table */
+.markdown-content table {
+    @apply mb-5 w-full border-collapse text-left;
+}
+
+.markdown-content th,
+.markdown-content td {
+    @apply border border-slate-300 px-4 py-2;
+}
+
+.markdown-content th {
+    @apply bg-slate-100 font-semibold;
+}
+
+/* Images */
+.markdown-content img {
+    @apply my-6 h-auto max-w-full rounded-xl;
+}
+
+/* Task List */
+.markdown-content input[type="checkbox"] {
+    @apply mr-2 accent-blue-600;
+}
