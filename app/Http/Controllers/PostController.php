@@ -33,7 +33,10 @@ class PostController extends Controller
             ->with('user:id,name,username')
             ->where('is_published', true)
             ->when($search, function ($query, $search) {
-                $query->where('title', 'ilike', "%{$search}%");
+                $query->whereRaw(
+                    'LOWER(title) LIKE ?',
+                    ['%' . Str::lower($search) . '%']
+                );
             })
             ->when($category, function ($query, $category) {
                 $query->where('category', $category);
@@ -119,7 +122,7 @@ class PostController extends Controller
     }
 
     /**
-     * Memperbarui artikel.
+     * Memperbarui artikel milik pengguna.
      */
     public function update(Request $request, Post $post)
     {
@@ -175,7 +178,7 @@ class PostController extends Controller
     }
 
     /**
-     * Menghapus artikel.
+     * Menghapus artikel milik pengguna.
      */
     public function destroy(Post $post)
     {
