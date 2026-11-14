@@ -3,7 +3,7 @@ import { Head, Link, useForm } from '@inertiajs/react';
 import MainLayout from '../../Layouts/MainLayout';
 
 export default function Login() {
-    const { data, setData, post, processing, errors, reset } = useForm({
+    const { data, setData, post, processing, errors } = useForm({
         username: '',
         password: '',
     });
@@ -12,7 +12,7 @@ export default function Login() {
         e.preventDefault();
 
         post('/login', {
-            onFinish: () => reset('password'),
+            preserveScroll: true,
         });
     }
 
@@ -22,6 +22,7 @@ export default function Login() {
 
             <div className="min-h-[75vh] flex items-center justify-center px-4 py-12 bg-slate-50">
                 <div className="w-full max-w-md bg-white rounded-2xl shadow-lg border border-slate-200 p-8">
+
                     <div className="text-center mb-8">
                         <h1 className="text-3xl font-bold text-slate-900">
                             Selamat Datang
@@ -33,6 +34,8 @@ export default function Login() {
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-5">
+
+                        {/* Username */}
                         <div>
                             <label
                                 htmlFor="login-username"
@@ -51,7 +54,6 @@ export default function Login() {
                                 }
                                 autoComplete="username"
                                 required
-                                autoFocus
                                 placeholder="Masukkan username"
                                 className="w-full rounded-lg border border-slate-300 px-4 py-3 text-slate-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                             />
@@ -63,6 +65,7 @@ export default function Login() {
                             )}
                         </div>
 
+                        {/* Password */}
                         <div>
                             <label
                                 htmlFor="login-password"
@@ -92,12 +95,14 @@ export default function Login() {
                             )}
                         </div>
 
+                        {/* General Error */}
                         {errors.username && errors.password && (
                             <p className="text-sm text-red-600">
                                 Username atau password tidak sesuai.
                             </p>
                         )}
 
+                        {/* Submit */}
                         <button
                             id="login-submit"
                             type="submit"
@@ -108,6 +113,7 @@ export default function Login() {
                         </button>
                     </form>
 
+                    {/* Register Link */}
                     <div className="mt-6 text-center text-sm text-slate-600">
                         Belum punya akun?{' '}
                         <Link
@@ -117,6 +123,7 @@ export default function Login() {
                             Daftar sekarang
                         </Link>
                     </div>
+
                 </div>
             </div>
         </MainLayout>
