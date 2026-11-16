@@ -34,18 +34,21 @@ Route::get('/posts/{slug}', [PostController::class, 'show'])
 |--------------------------------------------------------------------------
 */
 
+// Login
 Route::get('/login', [AuthController::class, 'showLogin'])
     ->name('login');
 
 Route::post('/login', [AuthController::class, 'login'])
     ->name('login.store');
 
+// Register
 Route::get('/register', [AuthController::class, 'showRegister'])
     ->name('register');
 
 Route::post('/register', [AuthController::class, 'register'])
     ->name('register.store');
 
+// Logout
 Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth')
     ->name('logout');
@@ -64,7 +67,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'index'])
         ->name('profile.index');
 
-    // Memperbarui informasi profil dan foto
+    // Memperbarui informasi profil
     Route::put('/profile', [ProfileController::class, 'update'])
         ->name('profile.update');
 
@@ -78,6 +81,7 @@ Route::middleware('auth')->group(function () {
 |--------------------------------------------------------------------------
 | Member Dashboard Routes
 |--------------------------------------------------------------------------
+| Hanya dapat diakses oleh Member yang sudah login.
 */
 
 Route::middleware(['auth', 'role:member'])
@@ -89,19 +93,19 @@ Route::middleware(['auth', 'role:member'])
         Route::get('/', [DashboardController::class, 'index'])
             ->name('index');
 
-        // Daftar artikel milik member
+        // Menampilkan daftar artikel milik member
         Route::get('/posts', [DashboardController::class, 'posts'])
             ->name('posts');
 
-        // Form tambah artikel
+        // Menampilkan form tambah artikel
         Route::get('/posts/create', [DashboardController::class, 'createPost'])
             ->name('posts.create');
 
-        // Form edit artikel
+        // Menampilkan form edit artikel
         Route::get('/posts/{post}/edit', [PostController::class, 'edit'])
             ->name('posts.edit');
 
-        // Membuat artikel
+        // Menyimpan artikel baru
         Route::post('/posts', [PostController::class, 'store'])
             ->name('posts.store');
 
@@ -119,6 +123,7 @@ Route::middleware(['auth', 'role:member'])
 |--------------------------------------------------------------------------
 | Admin Routes
 |--------------------------------------------------------------------------
+| Hanya dapat diakses oleh Admin yang sudah login.
 */
 
 Route::middleware(['auth', 'role:admin'])
