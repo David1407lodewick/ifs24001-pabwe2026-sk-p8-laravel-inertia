@@ -27,12 +27,12 @@ export default function Index({ posts }) {
             marginBottom: '8px',
         },
         description: {
-            color: '#64748b',
+            color: '#475569',
             margin: 0,
         },
         primaryButton: {
             display: 'inline-block',
-            backgroundColor: '#2563eb',
+            backgroundColor: '#1d4ed8',
             color: '#ffffff',
             padding: '11px 18px',
             borderRadius: '8px',
@@ -65,7 +65,7 @@ export default function Index({ posts }) {
         },
         editButton: {
             display: 'inline-block',
-            backgroundColor: '#f59e0b',
+            backgroundColor: '#1d4ed8',
             color: '#ffffff',
             padding: '7px 12px',
             borderRadius: '6px',
@@ -75,7 +75,7 @@ export default function Index({ posts }) {
             fontSize: '13px',
         },
         deleteButton: {
-            backgroundColor: '#dc2626',
+            backgroundColor: '#b91c1c',
             color: '#ffffff',
             padding: '7px 12px',
             borderRadius: '6px',
@@ -91,11 +91,20 @@ export default function Index({ posts }) {
         },
         paginationLink: {
             padding: '8px 13px',
-            border: '1px solid #cbd5e1',
+            border: '1px solid #64748b',
             borderRadius: '6px',
             textDecoration: 'none',
             color: '#334155',
             fontSize: '14px',
+            backgroundColor: '#ffffff',
+        },
+        paginationDisabled: {
+            padding: '8px 13px',
+            border: '1px solid #94a3b8',
+            borderRadius: '6px',
+            color: '#475569',
+            fontSize: '14px',
+            backgroundColor: '#f1f5f9',
         },
     };
 
@@ -116,7 +125,7 @@ export default function Index({ posts }) {
             <div style={styles.container}>
                 <div style={styles.header}>
                     <div>
-                        <h2 style={styles.title}>Kelola Artikel</h2>
+                        <h1 style={styles.title}>Kelola Artikel</h1>
                         <p style={styles.description}>
                             Kelola artikel yang telah kamu buat.
                         </p>
@@ -232,27 +241,37 @@ export default function Index({ posts }) {
                         {posts.links && (
                             <div style={styles.pagination}>
                                 {posts.links.map((link, index) => (
-                                    <Link
-                                        key={index}
-                                        href={link.url || '#'}
-                                        preserveScroll
-                                        style={{
-                                            ...styles.paginationLink,
-                                            backgroundColor: link.active
-                                                ? '#2563eb'
-                                                : '#ffffff',
-                                            color: link.active
-                                                ? '#ffffff'
-                                                : '#334155',
-                                            opacity: link.url ? 1 : 0.5,
-                                            pointerEvents: link.url
-                                                ? 'auto'
-                                                : 'none',
-                                        }}
-                                        dangerouslySetInnerHTML={{
-                                            __html: link.label,
-                                        }}
-                                    />
+                                    link.url ? (
+                                        <Link
+                                            key={index}
+                                            href={link.url}
+                                            preserveScroll
+                                            style={{
+                                                ...styles.paginationLink,
+                                                backgroundColor: link.active
+                                                    ? '#1d4ed8'
+                                                    : '#ffffff',
+                                                color: link.active
+                                                    ? '#ffffff'
+                                                    : '#334155',
+                                                borderColor: link.active
+                                                    ? '#1d4ed8'
+                                                    : '#64748b',
+                                            }}
+                                            aria-current={link.active ? 'page' : undefined}
+                                            dangerouslySetInnerHTML={{
+                                                __html: link.label,
+                                            }}
+                                        />
+                                    ) : (
+                                        <span
+                                            key={index}
+                                            style={styles.paginationDisabled}
+                                            dangerouslySetInnerHTML={{
+                                                __html: link.label,
+                                            }}
+                                        />
+                                    )
                                 ))}
                             </div>
                         )}
