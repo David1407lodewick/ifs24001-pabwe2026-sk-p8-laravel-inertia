@@ -211,6 +211,52 @@ class PostControllerTest extends TestCase
         $this->assertDatabaseCount('posts', 0);
     }
 
+    public function test_member_can_create_post_as_draft(): void
+    {
+        $user = $this->createMember();
+
+        $this->actingAs($user)
+            ->post('/dashboard/posts', $this->validPostData([
+                'title' => 'Artikel Draft Baru',
+                'is_published' => false,
+            ]))
+            ->assertRedirect();
+
+        $this->assertDatabaseHas('posts', [
+            'user_id' => $user->id,
+            'title' => 'Artikel Draft Baru',
+            'is_published' => false,
+            'published_at' => null,
+        ]);
+    }
+
+    public function test_member_can_access_edit_own_post(): void
+    {
+        $user = $this->createMember();
+        $post = $this->createPost($user);
+
+        $this->actingAs($user)
+            ->get('/dashboard/posts/' . $post->id . '/edit')
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Dashboard/Posts/Edit')
+                ->where('post.id', $post->id)
+                ->where('post.title', $post->title)
+            );
+    }
+
+    public function test_member_cannot_edit_other_users_post(): void
+    {
+        $owner = $this->createMember();
+        $otherUser = $this->createMember();
+
+        $post = $this->createPost($owner);
+
+        $this->actingAs($otherUser)
+            ->get('/dashboard/posts/' . $post->id . '/edit')
+            ->assertForbidden();
+    }
+
     public function test_member_can_update_own_post(): void
     {
         $user = $this->createMember();

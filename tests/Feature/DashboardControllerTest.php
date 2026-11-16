@@ -24,6 +24,7 @@ class DashboardControllerTest extends TestCase
         $response = $this->actingAs($user)->get('/dashboard');
 
         $response->assertOk();
+
         $response->assertInertia(
             fn ($page) => $page->component('Dashboard/Index')
         );
@@ -107,6 +108,58 @@ class DashboardControllerTest extends TestCase
         $response->assertInertia(fn ($page) => $page
             ->has('posts', 1)
             ->where('posts.0.title', 'Artikel Saya')
+        );
+    }
+
+    public function test_member_can_access_own_articles_page(): void
+    {
+        $user = User::create([
+            'name' => 'Member Test',
+            'username' => 'membertest',
+            'email' => 'member@test.com',
+            'password' => 'password123',
+            'role' => 'member',
+        ]);
+
+        Post::create([
+            'user_id' => $user->id,
+            'title' => 'Artikel Saya',
+            'slug' => 'artikel-saya',
+            'category' => 'Teknologi',
+            'content' => 'Isi artikel.',
+            'is_published' => true,
+        ]);
+
+        $response = $this->actingAs($user)->get('/dashboard/posts');
+
+        $response->assertOk();
+
+        $response->assertInertia(fn ($page) => $page
+            ->component('Dashboard/Posts/Index')
+            ->has('posts.data', 1)
+            ->where('posts.data.0.title', 'Artikel Saya')
+            ->where('filters.search', '')
+            ->where('filters.category', '')
+            ->has('categories', 6)
+        );
+    }
+
+    public function test_member_can_access_create_article_page(): void
+    {
+        $user = User::create([
+            'name' => 'Member Test',
+            'username' => 'membertest',
+            'email' => 'member@test.com',
+            'password' => 'password123',
+            'role' => 'member',
+        ]);
+
+        $response = $this->actingAs($user)->get('/dashboard/posts/create');
+
+        $response->assertOk();
+
+        $response->assertInertia(fn ($page) => $page
+            ->component('Dashboard/Posts/Create')
         );
     }
 
