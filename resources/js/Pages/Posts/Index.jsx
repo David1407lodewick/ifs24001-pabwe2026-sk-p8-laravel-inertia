@@ -174,8 +174,12 @@ export default function PostsIndex({ posts, filters, categories }) {
                                             {post.user?.name || 'Penulis'}
                                         </p>
 
-                                        <p className="mt-1 text-xs text-slate-700">
+                                        <p className="mt-1 text-xs text-slate-600">
                                             {formatDate(post.published_at)}
+                                        </p>
+
+                                        <p className="mt-1 text-xs text-slate-600">
+                                            /{post.slug}
                                         </p>
                                     </div>
 
