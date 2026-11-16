@@ -46,7 +46,7 @@ export default function PostsIndex({ posts, filters, categories }) {
     return (
         <MainLayout>
             <section className="mb-10 text-center">
-                <span className="rounded-full bg-blue-100 px-4 py-2 text-sm font-semibold text-blue-700">
+                <span className="rounded-full bg-blue-100 px-4 py-2 text-sm font-semibold text-blue-800">
                     BlogVerse Pro
                 </span>
 
@@ -71,6 +71,7 @@ export default function PostsIndex({ posts, filters, categories }) {
                         value={search}
                         onChange={(event) => setSearch(event.target.value)}
                         placeholder="Cari artikel berdasarkan judul..."
+                        aria-label="Cari artikel berdasarkan judul"
                         className="min-w-0 flex-1 rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                     />
 
@@ -91,10 +92,11 @@ export default function PostsIndex({ posts, filters, categories }) {
                         <button
                             type="button"
                             onClick={() => handleCategoryChange('')}
+                            aria-pressed={category === ''}
                             className={`rounded-full px-4 py-2 text-sm font-medium transition ${
                                 category === ''
                                     ? 'bg-blue-600 text-white'
-                                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                             }`}
                         >
                             Semua
@@ -105,10 +107,11 @@ export default function PostsIndex({ posts, filters, categories }) {
                                 key={item}
                                 type="button"
                                 onClick={() => handleCategoryChange(item)}
+                                aria-pressed={category === item}
                                 className={`rounded-full px-4 py-2 text-sm font-medium transition ${
                                     category === item
                                         ? 'bg-blue-600 text-white'
-                                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                        : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                                 }`}
                             >
                                 {item}
@@ -125,7 +128,7 @@ export default function PostsIndex({ posts, filters, categories }) {
                         Artikel Terbaru
                     </h2>
 
-                    <span className="text-sm text-slate-500">
+                    <span className="text-sm text-slate-600">
                         {posts.total} artikel ditemukan
                     </span>
                 </div>
@@ -146,15 +149,15 @@ export default function PostsIndex({ posts, filters, categories }) {
                                         loading="lazy"
                                     />
                                 ) : (
-                                    <div className="flex h-48 items-center justify-center bg-gradient-to-br from-blue-100 to-indigo-100">
-                                        <span className="text-4xl font-bold text-blue-300">
+                                    <div className="flex h-48 items-center justify-center bg-blue-100">
+                                        <span className="text-4xl font-bold text-blue-800">
                                             BV
                                         </span>
                                     </div>
                                 )}
 
                                 <div className="flex flex-1 flex-col p-5">
-                                    <span className="w-fit rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">
+                                    <span className="w-fit rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-800">
                                         {post.category}
                                     </span>
 
@@ -171,14 +174,14 @@ export default function PostsIndex({ posts, filters, categories }) {
                                             {post.user?.name || 'Penulis'}
                                         </p>
 
-                                        <p className="mt-1 text-xs text-slate-400">
+                                        <p className="mt-1 text-xs text-slate-700">
                                             {formatDate(post.published_at)}
                                         </p>
                                     </div>
 
                                     <Link
                                         href={`/posts/${post.slug}`}
-                                        className="mt-5 inline-flex items-center font-semibold text-blue-600 transition hover:text-blue-800"
+                                        className="mt-5 inline-flex items-center font-semibold text-blue-800 transition hover:text-blue-900"
                                     >
                                         Baca Selengkapnya →
                                     </Link>
@@ -192,7 +195,7 @@ export default function PostsIndex({ posts, filters, categories }) {
                             Artikel tidak ditemukan
                         </h3>
 
-                        <p className="mt-2 text-sm text-slate-500">
+                        <p className="mt-2 text-sm text-slate-600">
                             Coba gunakan kata kunci atau kategori lainnya.
                         </p>
 
@@ -218,14 +221,18 @@ export default function PostsIndex({ posts, filters, categories }) {
                                 key={index}
                                 href={link.url || '#'}
                                 preserveScroll
+                                aria-current={link.active ? 'page' : undefined}
+                                aria-disabled={!link.url}
                                 className={`rounded-lg px-4 py-2 text-sm font-medium ${
                                     link.active
-                                        ? 'bg-blue-600 text-white'
+                                        ? 'bg-blue-700 text-white'
                                         : link.url
-                                          ? 'border border-slate-200 bg-white text-slate-600 hover:bg-slate-100'
-                                          : 'cursor-not-allowed bg-slate-100 text-slate-400'
+                                            ? 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-100'
+                                            : 'cursor-not-allowed border border-slate-300 bg-slate-100 text-slate-600'
                                 }`}
-                                dangerouslySetInnerHTML={{ __html: link.label }}
+                                dangerouslySetInnerHTML={{
+                                    __html: link.label,
+                                }}
                             />
                         ))}
                     </div>
