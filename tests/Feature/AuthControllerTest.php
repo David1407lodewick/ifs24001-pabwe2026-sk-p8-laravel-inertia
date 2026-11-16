@@ -62,7 +62,7 @@ class AuthControllerTest extends TestCase
         ]);
 
         $response = $this->post('/login', [
-            'email' => 'member@example.com',
+            'username' => 'membertest',
             'password' => 'password123',
         ]);
 
@@ -81,7 +81,7 @@ class AuthControllerTest extends TestCase
         ]);
 
         $response = $this->post('/login', [
-            'email' => 'admin@example.com',
+            'username' => 'admintest',
             'password' => 'password123',
         ]);
 
@@ -99,11 +99,11 @@ class AuthControllerTest extends TestCase
         ]);
 
         $response = $this->post('/login', [
-            'email' => 'wrong@example.com',
+            'username' => 'wrongtest',
             'password' => 'passwordsalah',
         ]);
 
-        $response->assertSessionHasErrors('email');
+        $response->assertSessionHasErrors('username');
         $this->assertGuest();
     }
 
