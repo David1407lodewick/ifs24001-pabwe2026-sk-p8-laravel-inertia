@@ -8,6 +8,9 @@ use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
+    /**
+     * Menampilkan dashboard member.
+     */
     public function index()
     {
         $user = Auth::user();
@@ -24,5 +27,39 @@ class DashboardController extends Controller
             ],
             'posts' => $posts,
         ]);
+    }
+
+    /**
+     * Menampilkan daftar artikel milik member.
+     */
+    public function posts()
+    {
+        $posts = Post::where('user_id', Auth::id())
+            ->latest()
+            ->paginate(9);
+
+        return Inertia::render('Dashboard/Posts/Index', [
+            'posts' => $posts,
+            'filters' => [
+                'search' => '',
+                'category' => '',
+            ],
+            'categories' => [
+                'Teknologi',
+                'Pendidikan',
+                'Gaya Hidup',
+                'Bisnis',
+                'Opini',
+                'Umum',
+            ],
+        ]);
+    }
+
+    /**
+     * Menampilkan form tambah artikel.
+     */
+    public function createPost()
+    {
+        return Inertia::render('Dashboard/Posts/Create');
     }
 }

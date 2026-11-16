@@ -1,223 +1,264 @@
 
-import { useState } from 'react';
-import { Link, router } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import MainLayout from '../../../Layouts/MainLayout';
 
-export default function PostsIndex({ posts, filters, categories }) {
-    const [search, setSearch] = useState(filters.search || '');
-    const [category, setCategory] = useState(filters.category || '');
+export default function Index({ posts }) {
+    const postList = posts?.data ?? [];
 
-    function handleSearch(event) {
-        event.preventDefault();
+    const styles = {
+        container: {
+            maxWidth: '1150px',
+            margin: '0 auto',
+            padding: '40px 24px',
+            minHeight: '550px',
+        },
+        header: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '16px',
+            marginBottom: '28px',
+        },
+        title: {
+            fontSize: '28px',
+            fontWeight: '700',
+            color: '#172554',
+            marginBottom: '8px',
+        },
+        description: {
+            color: '#64748b',
+            margin: 0,
+        },
+        primaryButton: {
+            display: 'inline-block',
+            backgroundColor: '#2563eb',
+            color: '#ffffff',
+            padding: '11px 18px',
+            borderRadius: '8px',
+            textDecoration: 'none',
+            fontWeight: '600',
+        },
+        tableWrapper: {
+            width: '100%',
+            overflowX: 'auto',
+            backgroundColor: '#ffffff',
+            borderRadius: '10px',
+            border: '1px solid #e2e8f0',
+        },
+        table: {
+            width: '100%',
+            borderCollapse: 'collapse',
+            minWidth: '700px',
+        },
+        th: {
+            padding: '15px',
+            textAlign: 'left',
+            backgroundColor: '#f1f5f9',
+            color: '#334155',
+            borderBottom: '1px solid #e2e8f0',
+        },
+        td: {
+            padding: '15px',
+            borderBottom: '1px solid #e2e8f0',
+            color: '#334155',
+        },
+        editButton: {
+            display: 'inline-block',
+            backgroundColor: '#f59e0b',
+            color: '#ffffff',
+            padding: '7px 12px',
+            borderRadius: '6px',
+            textDecoration: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            fontSize: '13px',
+        },
+        deleteButton: {
+            backgroundColor: '#dc2626',
+            color: '#ffffff',
+            padding: '7px 12px',
+            borderRadius: '6px',
+            border: 'none',
+            cursor: 'pointer',
+            fontSize: '13px',
+        },
+        pagination: {
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '8px',
+            marginTop: '24px',
+        },
+        paginationLink: {
+            padding: '8px 13px',
+            border: '1px solid #cbd5e1',
+            borderRadius: '6px',
+            textDecoration: 'none',
+            color: '#334155',
+            fontSize: '14px',
+        },
+    };
 
-        router.get(
-            '/posts',
-            { search, category },
-            {
-                preserveState: true,
-                replace: true,
-            }
+    function handleDelete(id) {
+        const confirmed = window.confirm(
+            'Apakah kamu yakin ingin menghapus artikel ini?'
         );
-    }
 
-    function handleCategoryChange(value) {
-        setCategory(value);
-
-        router.get(
-            '/posts',
-            { search, category: value },
-            {
-                preserveState: true,
-                replace: true,
-            }
-        );
-    }
-
-    function formatDate(date) {
-        if (!date) return '-';
-
-        return new Date(date).toLocaleDateString('id-ID', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric',
-        });
+        if (confirmed) {
+            router.delete(`/dashboard/posts/${id}`);
+        }
     }
 
     return (
         <MainLayout>
-            <section className="mb-10 text-center">
-                <span className="rounded-full bg-blue-100 px-4 py-2 text-sm font-semibold text-blue-700">
-                    BlogVerse Pro
-                </span>
+            <Head title="Kelola Artikel" />
 
-                <h1 className="mt-6 text-4xl font-bold tracking-tight text-slate-900">
-                    Jelajahi Artikel
-                </h1>
-
-                <p className="mx-auto mt-4 max-w-2xl text-slate-600">
-                    Temukan berbagai wawasan, ide, dan inspirasi dari
-                    komunitas BlogVerse Pro.
-                </p>
-            </section>
-
-            <section className="mb-8 rounded-2xl border border-slate-200 bg-white p-5">
-                <form
-                    onSubmit={handleSearch}
-                    className="flex flex-col gap-4 sm:flex-row"
-                >
-                    <input
-                        type="text"
-                        value={search}
-                        onChange={(event) => setSearch(event.target.value)}
-                        placeholder="Cari artikel berdasarkan judul..."
-                        className="min-w-0 flex-1 rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-                    />
-
-                    <button
-                        type="submit"
-                        className="rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-700"
-                    >
-                        Cari Artikel
-                    </button>
-                </form>
-
-                <div className="mt-5">
-                    <p className="mb-3 text-sm font-semibold text-slate-700">
-                        Filter Kategori
-                    </p>
-
-                    <div className="flex flex-wrap gap-2">
-                        <button
-                            type="button"
-                            onClick={() => handleCategoryChange('')}
-                            className={`rounded-full px-4 py-2 text-sm font-medium transition ${
-                                category === ''
-                                    ? 'bg-blue-600 text-white'
-                                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                            }`}
-                        >
-                            Semua
-                        </button>
-
-                        {categories.map((item) => (
-                            <button
-                                key={item}
-                                type="button"
-                                onClick={() => handleCategoryChange(item)}
-                                className={`rounded-full px-4 py-2 text-sm font-medium transition ${
-                                    category === item
-                                        ? 'bg-blue-600 text-white'
-                                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                                }`}
-                            >
-                                {item}
-                            </button>
-                        ))}
+            <div style={styles.container}>
+                <div style={styles.header}>
+                    <div>
+                        <h2 style={styles.title}>Kelola Artikel</h2>
+                        <p style={styles.description}>
+                            Kelola artikel yang telah kamu buat.
+                        </p>
                     </div>
-                </div>
-            </section>
 
-            <section>
-                <div className="mb-5 flex items-center justify-between">
-                    <h2 className="text-xl font-bold text-slate-900">
-                        Artikel Terbaru
-                    </h2>
-
-                    <span className="text-sm text-slate-500">
-                        {posts.total} artikel ditemukan
-                    </span>
+                    <Link
+                        href="/dashboard/posts/create"
+                        style={styles.primaryButton}
+                    >
+                        + Tambah Artikel
+                    </Link>
                 </div>
 
-                {posts.data.length > 0 ? (
-                    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                        {posts.data.map((post) => (
-                            <article
-                                key={post.id}
-                                className="flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white transition hover:-translate-y-1 hover:shadow-lg"
-                            >
-                                <div className="flex h-40 items-center justify-center bg-gradient-to-br from-blue-100 to-indigo-100">
-                                    <span className="text-4xl font-bold text-blue-300">
-                                        BV
-                                    </span>
-                                </div>
-
-                                <div className="flex flex-1 flex-col p-5">
-                                    <span className="w-fit rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">
-                                        {post.category}
-                                    </span>
-
-                                    <h3 className="mt-4 text-lg font-bold text-slate-900">
-                                        {post.title}
-                                    </h3>
-
-                                    <p className="mt-2 line-clamp-3 text-sm leading-6 text-slate-600">
-                                        {post.excerpt || 'Belum ada ringkasan artikel.'}
-                                    </p>
-
-                                    <div className="mt-5 border-t border-slate-100 pt-4">
-                                        <p className="text-sm font-medium text-slate-700">
-                                            {post.user?.name || 'Penulis'}
-                                        </p>
-
-                                        <p className="mt-1 text-xs text-slate-400">
-                                            {formatDate(post.published_at)}
-                                        </p>
-                                    </div>
-
-                                    <Link
-                                        href={`/posts/${post.slug}`}
-                                        className="mt-5 inline-flex items-center font-semibold text-blue-600 transition hover:text-blue-800"
-                                    >
-                                        Baca Selengkapnya →
-                                    </Link>
-                                </div>
-                            </article>
-                        ))}
+                {postList.length === 0 ? (
+                    <div
+                        style={{
+                            padding: '20px',
+                            backgroundColor: '#eff6ff',
+                            border: '1px solid #bfdbfe',
+                            borderRadius: '8px',
+                            color: '#1e40af',
+                        }}
+                    >
+                        Kamu belum memiliki artikel.
+                        Silakan buat artikel baru.
                     </div>
                 ) : (
-                    <div className="rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-16 text-center">
-                        <h3 className="text-lg font-semibold text-slate-800">
-                            Artikel tidak ditemukan
-                        </h3>
+                    <>
+                        <div style={styles.tableWrapper}>
+                            <table style={styles.table}>
+                                <thead>
+                                    <tr>
+                                        <th style={styles.th}>Judul</th>
+                                        <th style={styles.th}>Kategori</th>
+                                        <th style={styles.th}>Status</th>
+                                        <th style={styles.th}>Tanggal</th>
+                                        <th style={styles.th}>Aksi</th>
+                                    </tr>
+                                </thead>
 
-                        <p className="mt-2 text-sm text-slate-500">
-                            Coba gunakan kata kunci atau kategori lainnya.
-                        </p>
+                                <tbody>
+                                    {postList.map((post) => (
+                                        <tr key={post.id}>
+                                            <td style={styles.td}>
+                                                <strong>{post.title}</strong>
+                                            </td>
 
-                        <button
-                            type="button"
-                            onClick={() => {
-                                setSearch('');
-                                setCategory('');
-                                router.get('/posts');
-                            }}
-                            className="mt-5 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-700"
-                        >
-                            Reset Pencarian
-                        </button>
-                    </div>
+                                            <td style={styles.td}>
+                                                {post.category}
+                                            </td>
+
+                                            <td style={styles.td}>
+                                                <span
+                                                    style={{
+                                                        backgroundColor: post.is_published
+                                                            ? '#dcfce7'
+                                                            : '#f1f5f9',
+                                                        color: post.is_published
+                                                            ? '#166534'
+                                                            : '#475569',
+                                                        padding: '5px 10px',
+                                                        borderRadius: '20px',
+                                                        fontSize: '12px',
+                                                        fontWeight: '600',
+                                                    }}
+                                                >
+                                                    {post.is_published
+                                                        ? 'Published'
+                                                        : 'Draft'}
+                                                </span>
+                                            </td>
+
+                                            <td style={styles.td}>
+                                                {post.created_at
+                                                    ? new Date(
+                                                        post.created_at
+                                                    ).toLocaleDateString('id-ID')
+                                                    : '-'}
+                                            </td>
+
+                                            <td style={styles.td}>
+                                                <div
+                                                    style={{
+                                                        display: 'flex',
+                                                        gap: '8px',
+                                                        alignItems: 'center',
+                                                    }}
+                                                >
+                                                    <Link
+                                                        href={`/dashboard/posts/${post.id}/edit`}
+                                                        style={styles.editButton}
+                                                    >
+                                                        Edit
+                                                    </Link>
+
+                                                    <button
+                                                        type="button"
+                                                        onClick={() =>
+                                                            handleDelete(post.id)
+                                                        }
+                                                        style={styles.deleteButton}
+                                                    >
+                                                        Hapus
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {posts.links && (
+                            <div style={styles.pagination}>
+                                {posts.links.map((link, index) => (
+                                    <Link
+                                        key={index}
+                                        href={link.url || '#'}
+                                        preserveScroll
+                                        style={{
+                                            ...styles.paginationLink,
+                                            backgroundColor: link.active
+                                                ? '#2563eb'
+                                                : '#ffffff',
+                                            color: link.active
+                                                ? '#ffffff'
+                                                : '#334155',
+                                            opacity: link.url ? 1 : 0.5,
+                                            pointerEvents: link.url
+                                                ? 'auto'
+                                                : 'none',
+                                        }}
+                                        dangerouslySetInnerHTML={{
+                                            __html: link.label,
+                                        }}
+                                    />
+                                ))}
+                            </div>
+                        )}
+                    </>
                 )}
-
-                {posts.links.length > 3 && (
-                    <div className="mt-10 flex flex-wrap justify-center gap-2">
-                        {posts.links.map((link, index) => (
-                            <Link
-                                key={index}
-                                href={link.url || '#'}
-                                preserveScroll
-                                className={`rounded-lg px-4 py-2 text-sm font-medium ${
-                                    link.active
-                                        ? 'bg-blue-600 text-white'
-                                        : link.url
-                                          ? 'border border-slate-200 bg-white text-slate-600 hover:bg-slate-100'
-                                          : 'cursor-not-allowed bg-slate-100 text-slate-400'
-                                }`}
-                                dangerouslySetInnerHTML={{ __html: link.label }}
-                            />
-                        ))}
-                    </div>
-                )}
-            </section>
+            </div>
         </MainLayout>
     );
 }

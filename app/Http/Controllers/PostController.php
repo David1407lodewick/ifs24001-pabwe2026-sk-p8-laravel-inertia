@@ -63,7 +63,7 @@ class PostController extends Controller
     }
 
     /**
-     * Menampilkan detail artikel.
+     * Menampilkan detail artikel publik.
      */
     public function show(string $slug)
     {
@@ -73,6 +73,18 @@ class PostController extends Controller
             ->firstOrFail();
 
         return Inertia::render('Posts/Show', [
+            'post' => $post,
+        ]);
+    }
+
+    /**
+     * Menampilkan form edit artikel milik pengguna.
+     */
+    public function edit(Post $post)
+    {
+        abort_unless($post->user_id === Auth::id(), 403);
+
+        return Inertia::render('Dashboard/Posts/Edit', [
             'post' => $post,
         ]);
     }

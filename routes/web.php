@@ -89,6 +89,18 @@ Route::middleware(['auth', 'role:member'])
         Route::get('/', [DashboardController::class, 'index'])
             ->name('index');
 
+        // Daftar artikel milik member
+        Route::get('/posts', [DashboardController::class, 'posts'])
+            ->name('posts');
+
+        // Form tambah artikel
+        Route::get('/posts/create', [DashboardController::class, 'createPost'])
+            ->name('posts.create');
+
+        // Form edit artikel
+        Route::get('/posts/{post}/edit', [PostController::class, 'edit'])
+            ->name('posts.edit');
+
         // Membuat artikel
         Route::post('/posts', [PostController::class, 'store'])
             ->name('posts.store');
