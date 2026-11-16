@@ -18,6 +18,12 @@ export default function ProfileIndex({ user }) {
         password_confirmation: '',
     });
 
+    const inputClass =
+        'w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-500';
+
+    const labelClass =
+        'mb-2 block text-sm font-medium text-slate-700';
+
     function handleProfileSubmit(e) {
         e.preventDefault();
 
@@ -52,7 +58,10 @@ export default function ProfileIndex({ user }) {
                 </div>
 
                 {flash?.success && (
-                    <div className="rounded-lg border border-green-200 bg-green-50 p-4 text-sm text-green-700">
+                    <div
+                        className="rounded-lg border border-green-200 bg-green-50 p-4 text-sm text-green-700"
+                        role="status"
+                    >
                         {flash.success}
                     </div>
                 )}
@@ -71,19 +80,22 @@ export default function ProfileIndex({ user }) {
                                 className="h-24 w-24 rounded-full border object-cover"
                             />
                         ) : (
-                            <div className="flex h-24 w-24 items-center justify-center rounded-full bg-blue-100 text-3xl font-bold text-blue-700">
+                            <div
+                                className="flex h-24 w-24 items-center justify-center rounded-full bg-blue-100 text-3xl font-bold text-blue-800"
+                                aria-label={`Inisial ${user.name}`}
+                            >
                                 {user.name?.charAt(0).toUpperCase()}
                             </div>
                         )}
 
                         <div>
-                            <h3 className="text-lg font-bold">
+                            <h3 className="text-lg font-bold text-slate-900">
                                 {user.name}
                             </h3>
-                            <p className="text-sm text-slate-500">
+                            <p className="text-sm text-slate-600">
                                 @{user.username}
                             </p>
-                            <span className="mt-2 inline-block rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold capitalize text-blue-700">
+                            <span className="mt-2 inline-block rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold capitalize text-blue-800">
                                 {user.role}
                             </span>
                         </div>
@@ -91,23 +103,29 @@ export default function ProfileIndex({ user }) {
 
                     <div className="mt-6 grid gap-4 border-t border-slate-100 pt-6 sm:grid-cols-2">
                         <div>
-                            <p className="text-sm text-slate-500">Nama</p>
-                            <p className="mt-1 font-medium">{user.name}</p>
+                            <p className="text-sm text-slate-600">Nama</p>
+                            <p className="mt-1 font-medium text-slate-900">
+                                {user.name}
+                            </p>
                         </div>
 
                         <div>
-                            <p className="text-sm text-slate-500">Username</p>
-                            <p className="mt-1 font-medium">{user.username}</p>
+                            <p className="text-sm text-slate-600">Username</p>
+                            <p className="mt-1 font-medium text-slate-900">
+                                {user.username}
+                            </p>
                         </div>
 
                         <div>
-                            <p className="text-sm text-slate-500">Email</p>
-                            <p className="mt-1 font-medium">{user.email}</p>
+                            <p className="text-sm text-slate-600">Email</p>
+                            <p className="mt-1 font-medium text-slate-900">
+                                {user.email}
+                            </p>
                         </div>
 
                         <div>
-                            <p className="text-sm text-slate-500">Bergabung</p>
-                            <p className="mt-1 font-medium">
+                            <p className="text-sm text-slate-600">Bergabung</p>
+                            <p className="mt-1 font-medium text-slate-900">
                                 {user.created_at
                                     ? new Date(user.created_at).toLocaleDateString(
                                           'id-ID',
@@ -129,52 +147,66 @@ export default function ProfileIndex({ user }) {
                         Edit Profil
                     </h2>
 
-                    <form onSubmit={handleProfileSubmit} className="mt-6 space-y-5">
+                    <form
+                        onSubmit={handleProfileSubmit}
+                        className="mt-6 space-y-5"
+                    >
                         <div>
-                            <label className="mb-2 block text-sm font-medium">
+                            <label htmlFor="profile-name" className={labelClass}>
                                 Nama Lengkap
                             </label>
                             <input
+                                id="profile-name"
                                 type="text"
                                 value={profileForm.data.name}
                                 onChange={(e) =>
                                     profileForm.setData('name', e.target.value)
                                 }
-                                className="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-500"
+                                className={inputClass}
+                                autoComplete="name"
                                 required
                             />
                             {profileForm.errors.name && (
-                                <p className="mt-1 text-sm text-red-600">
+                                <p className="mt-1 text-sm text-red-700">
                                     {profileForm.errors.name}
                                 </p>
                             )}
                         </div>
 
                         <div>
-                            <label className="mb-2 block text-sm font-medium">
+                            <label
+                                htmlFor="profile-username"
+                                className={labelClass}
+                            >
                                 Username
                             </label>
                             <input
+                                id="profile-username"
                                 type="text"
                                 value={profileForm.data.username}
                                 onChange={(e) =>
                                     profileForm.setData('username', e.target.value)
                                 }
-                                className="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-500"
+                                className={inputClass}
+                                autoComplete="username"
                                 required
                             />
                             {profileForm.errors.username && (
-                                <p className="mt-1 text-sm text-red-600">
+                                <p className="mt-1 text-sm text-red-700">
                                     {profileForm.errors.username}
                                 </p>
                             )}
                         </div>
 
                         <div>
-                            <label className="mb-2 block text-sm font-medium">
+                            <label
+                                htmlFor="profile-photo"
+                                className={labelClass}
+                            >
                                 Foto Profil
                             </label>
                             <input
+                                id="profile-photo"
                                 type="file"
                                 accept="image/jpeg,image/png,image/webp"
                                 onChange={(e) =>
@@ -185,11 +217,11 @@ export default function ProfileIndex({ user }) {
                                 }
                                 className="w-full rounded-lg border border-slate-300 p-3"
                             />
-                            <p className="mt-1 text-xs text-slate-500">
+                            <p className="mt-1 text-xs text-slate-600">
                                 Format JPG, PNG, atau WEBP. Maksimal 2 MB.
                             </p>
                             {profileForm.errors.profile_photo && (
-                                <p className="mt-1 text-sm text-red-600">
+                                <p className="mt-1 text-sm text-red-700">
                                     {profileForm.errors.profile_photo}
                                 </p>
                             )}
@@ -198,7 +230,7 @@ export default function ProfileIndex({ user }) {
                         <button
                             type="submit"
                             disabled={profileForm.processing}
-                            className="rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-700 disabled:opacity-50"
+                            className="rounded-lg bg-blue-700 px-6 py-3 font-semibold text-white transition hover:bg-blue-800 disabled:opacity-50"
                         >
                             {profileForm.processing
                                 ? 'Menyimpan...'
@@ -212,16 +244,24 @@ export default function ProfileIndex({ user }) {
                     <h2 className="text-xl font-bold text-slate-900">
                         Keamanan Akun
                     </h2>
-                    <p className="mt-2 text-sm text-slate-500">
+
+                    <p className="mt-2 text-sm text-slate-600">
                         Ubah password untuk menjaga keamanan akun.
                     </p>
 
-                    <form onSubmit={handlePasswordSubmit} className="mt-6 space-y-5">
+                    <form
+                        onSubmit={handlePasswordSubmit}
+                        className="mt-6 space-y-5"
+                    >
                         <div>
-                            <label className="mb-2 block text-sm font-medium">
+                            <label
+                                htmlFor="current-password"
+                                className={labelClass}
+                            >
                                 Password Saat Ini
                             </label>
                             <input
+                                id="current-password"
                                 type="password"
                                 value={passwordForm.data.current_password}
                                 onChange={(e) =>
@@ -230,41 +270,51 @@ export default function ProfileIndex({ user }) {
                                         e.target.value
                                     )
                                 }
-                                className="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-500"
+                                className={inputClass}
+                                autoComplete="current-password"
                                 required
                             />
                             {passwordForm.errors.current_password && (
-                                <p className="mt-1 text-sm text-red-600">
+                                <p className="mt-1 text-sm text-red-700">
                                     {passwordForm.errors.current_password}
                                 </p>
                             )}
                         </div>
 
                         <div>
-                            <label className="mb-2 block text-sm font-medium">
+                            <label
+                                htmlFor="new-password"
+                                className={labelClass}
+                            >
                                 Password Baru
                             </label>
                             <input
+                                id="new-password"
                                 type="password"
                                 value={passwordForm.data.password}
                                 onChange={(e) =>
                                     passwordForm.setData('password', e.target.value)
                                 }
-                                className="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-500"
+                                className={inputClass}
+                                autoComplete="new-password"
                                 required
                             />
                             {passwordForm.errors.password && (
-                                <p className="mt-1 text-sm text-red-600">
+                                <p className="mt-1 text-sm text-red-700">
                                     {passwordForm.errors.password}
                                 </p>
                             )}
                         </div>
 
                         <div>
-                            <label className="mb-2 block text-sm font-medium">
+                            <label
+                                htmlFor="confirm-password"
+                                className={labelClass}
+                            >
                                 Konfirmasi Password Baru
                             </label>
                             <input
+                                id="confirm-password"
                                 type="password"
                                 value={passwordForm.data.password_confirmation}
                                 onChange={(e) =>
@@ -273,7 +323,8 @@ export default function ProfileIndex({ user }) {
                                         e.target.value
                                     )
                                 }
-                                className="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-500"
+                                className={inputClass}
+                                autoComplete="new-password"
                                 required
                             />
                         </div>
@@ -281,7 +332,7 @@ export default function ProfileIndex({ user }) {
                         <button
                             type="submit"
                             disabled={passwordForm.processing}
-                            className="rounded-lg bg-slate-900 px-6 py-3 font-semibold text-white transition hover:bg-slate-700 disabled:opacity-50"
+                            className="rounded-lg bg-slate-900 px-6 py-3 font-semibold text-white transition hover:bg-slate-800 disabled:opacity-50"
                         >
                             {passwordForm.processing
                                 ? 'Memproses...'
